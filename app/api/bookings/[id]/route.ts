@@ -4,11 +4,12 @@ import { ObjectId } from "mongodb";
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { status } = await request.json();
-    console.log("Updating booking:", params.id, "to status:", status);
+    const { id } = await params;
+    console.log("Updating booking:", id, "to status:", status);
     
     const client = await clientPromise;
     const db = client.db("car-style");
@@ -18,16 +19,19 @@ export async function PATCH(
     
     // First try with string ID
     result = await db.collection("bookings").updateOne(
-      { _id: params.id as any },
+      { _id: id as any },
       { $set: { status, updatedAt: new Date() } }
     );
+    console.log("String ID update result:", result);
     
     // If no match, try with ObjectId
-    if (result.matchedCount === 0 && ObjectId.isValid(params.id)) {
+    if (result.matchedCount === 0 && ObjectId.isValid(id)) {
+      console.log("Trying with ObjectId:", id);
       result = await db.collection("bookings").updateOne(
-        { _id: new ObjectId(params.id) },
+        { _id: new ObjectId(id) },
         { $set: { status, updatedAt: new Date() } }
       );
+      console.log("ObjectId update result:", result);
     }
 
     if (result.matchedCount === 0) {
@@ -49,10 +53,11 @@ export async function PATCH(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    console.log("Deleting booking:", params.id);
+    const { id } = await params;
+    console.log("Deleting booking:", id);
     
     const client = await clientPromise;
     const db = client.db("car-style");
@@ -62,13 +67,13 @@ export async function DELETE(
     
     // First try with string ID
     result = await db.collection("bookings").deleteOne({
-      _id: params.id as any
+      _id: id as any
     });
     
     // If no match, try with ObjectId
-    if (result.deletedCount === 0 && ObjectId.isValid(params.id)) {
+    if (result.deletedCount === 0 && ObjectId.isValid(id)) {
       result = await db.collection("bookings").deleteOne({
-        _id: new ObjectId(params.id)
+        _id: new ObjectId(id)
       });
     }
 

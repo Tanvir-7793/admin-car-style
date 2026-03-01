@@ -4,10 +4,11 @@ import { ObjectId } from "mongodb";
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    console.log("Attempting to delete inquiry with ID:", params.id);
+    const { id } = await params;
+    console.log("Attempting to delete inquiry with ID:", id);
     
     const client = await clientPromise;
     const db = client.db("car-style");
@@ -16,31 +17,31 @@ export async function DELETE(
     let result;
     
     // First try with string ID
-    console.log("Trying to delete with string ID:", params.id);
+    console.log("Trying to delete with string ID:", id);
     result = await db.collection("inquiries").deleteOne({
-      _id: params.id as any
+      _id: id as any
     });
     console.log("String ID delete result:", result);
     
     // If no match, try with ObjectId
-    if (result.deletedCount === 0 && ObjectId.isValid(params.id)) {
-      console.log("Trying to delete with ObjectId:", params.id);
+    if (result.deletedCount === 0 && ObjectId.isValid(id)) {
+      console.log("Trying to delete with ObjectId:", id);
       result = await db.collection("inquiries").deleteOne({
-        _id: new ObjectId(params.id)
+        _id: new ObjectId(id)
       });
       console.log("ObjectId delete result:", result);
     }
 
     // Let's also check what inquiry exists with this ID
     let existingInquiry;
-    if (ObjectId.isValid(params.id)) {
+    if (ObjectId.isValid(id)) {
       existingInquiry = await db.collection("inquiries").findOne({
-        _id: new ObjectId(params.id)
+        _id: new ObjectId(id)
       });
     }
     if (!existingInquiry) {
       existingInquiry = await db.collection("inquiries").findOne({
-        _id: params.id as any
+        _id: id as any
       });
     }
     console.log("Existing inquiry found:", existingInquiry);
