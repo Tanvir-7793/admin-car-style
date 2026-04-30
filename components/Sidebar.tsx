@@ -31,7 +31,7 @@ export default function Sidebar() {
         // Clear localStorage
         localStorage.removeItem("adminToken");
         localStorage.removeItem("adminUser");
-        
+
         // Redirect to login page
         window.location.href = "/login";
     };
@@ -83,7 +83,7 @@ export default function Sidebar() {
                 </nav>
 
                 <div className="p-4 mt-auto border-t border-brand-border/50">
-                    <button 
+                    <button
                         onClick={handleSignOut}
                         className="flex items-center gap-3 px-4 py-3 w-full rounded-xl font-bold text-red-500 hover:bg-red-50 transition-all duration-300"
                     >
@@ -91,10 +91,12 @@ export default function Sidebar() {
                         <span>Sign Out</span>
                     </button>
                     <div className="mt-4 text-center text-[10px] text-foreground/40 font-bold uppercase tracking-wider">
-                        Built with <span className="text-red-500 text-xs">♥</span> by{' '}
-                        <a href="https://wa.me/919860193973" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                            Tanvir Mujawar
-                        </a>
+                        <p>
+                            Built with <span className="text-red-500">♥</span> by{' '}
+                            <a href="https://wa.me/919860193973" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                <span className="font-bold tracking-wider">WEBNIVO</span> <span className="">web studio</span>
+                            </a>
+                        </p>
                     </div>
                 </div>
             </aside>
