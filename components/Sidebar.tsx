@@ -11,7 +11,8 @@ import {
     LogOut,
     Menu,
     X,
-    MessageSquare
+    MessageSquare,
+    Images
 } from "lucide-react";
 
 const menuItems = [
@@ -19,6 +20,7 @@ const menuItems = [
     { icon: MessageSquare, label: "Inquiries", href: "/inquiries" },
     { icon: Car, label: "Services", href: "/services" },
     { icon: Calendar, label: "Bookings", href: "/bookings" },
+    { icon: Images, label: "Gallery", href: "/gallery" },
 ];
 
 export default function Sidebar() {
@@ -88,6 +90,12 @@ export default function Sidebar() {
                         <LogOut size={20} />
                         <span>Sign Out</span>
                     </button>
+                    <div className="mt-4 text-center text-[10px] text-foreground/40 font-bold uppercase tracking-wider">
+                        Built with <span className="text-red-500 text-xs">♥</span> by{' '}
+                        <a href="https://wa.me/919860193973" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                            Tanvir Mujawar
+                        </a>
+                    </div>
                 </div>
             </aside>
         </>
